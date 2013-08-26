@@ -86,7 +86,7 @@ myUtils.getConfig(function (err, config) {
         "dbIndex": db
       };
       if (!myUtils.containsConnection(config.default_connections, newDefault)) {
-        redisConnections.push(redis.createClient(newDefault.port, newDefault.host));
+        redisConnections.push(redis.createClient(newDefault.port, newDefault.host, {return_buffers: true}));
         if (args['redis-password']) {
           redisConnections.getLast().auth(args['redis-password'], function (err) {
             if (err) {
@@ -119,7 +119,7 @@ myUtils.getConfig(function (err, config) {
 function startDefaultConnections (connections, callback) {
   if (connections) {
     connections.forEach(function (connection) {
-      redisConnections.push(redis.createClient(connection.port, connection.host));
+      redisConnections.push(redis.createClient(connection.port, connection.host, {return_buffers: true}));
       if (connection.password) {
         redisConnections.getLast().auth(connection.password, function (err) {
           if (err) {
